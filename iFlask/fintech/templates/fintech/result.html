@@ -1,0 +1,253 @@
+{% extends "layout.html" %}
+
+
+{% block subtitle %} FinTech {% endblock %}
+
+ {% block head %}
+ <link rel="stylesheet" type="text/css" href="/static/css/toggle.css">
+ <link rel="stylesheet" type="text/css" href="/static/css/slider.css">
+ <link rel="stylesheet" type="text/css" href="/static/css/main.css">
+ <script type="text/javascript" src="{{ url_for('static', filename='js/slider.js') }}"></script>
+ {% endblock %}
+
+{% block body %}
+
+	<div class="banner" id="banner"></div>
+	<div class="container-fluid intro">
+		<div class="title" id="demo-name">FinTech-Intelligent Personal Investment Consultant</div>
+		<div class="description" id="demo-detail">The centerpiece of model’s entire operation is using
+            algorithm to choose which notes to invest in. Often investors have to choose between hundreds
+            or thousands of available loans at Lending Club. This model makes the process easier by using
+            machine-learning to calculate which notes are more likely to perform better than others.
+            The moment new loans are added to the platforms, the algorithm analyzes the variables of these
+            loans and only invests in the best ones. The entire process, again, takes a split second.
+        </div>
+        <div class="description" style="font-weight: 400;">
+            The algorithm used is Gradient Boosted Regression Trees (GBRT). The advantages of GBRT are: Natural handling of data of mixed type (= heterogeneous features), Predictive power, Robustness to outliers in output space (via robust loss functions).
+        </div>
+        <div class="description" style="font-weight: 500;">
+            Five key features was picked according to the feature-importance scores: Debt-to-Income Ratio, Annual Income, Total Installment high credit/credit Limit, Revolving Credit Limit, Portion of Balances.
+        </div>
+	</div>
+
+	<div class="container fluid content" id="content">
+		<div class="col-sm-6 no-padding">
+			<div class="wrapper input-box">
+				<div class="box-header-in">
+					<div class="input-title">Features</div>
+				</div>
+                <form id="frmInput" class="ajax-post" action="{{url_for('fintech.form')}}" method="post">
+                    <div class="input-item">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <label>Amount</label>
+                                <input type="text" id="loan_amnt" name="loan_amnt" class="myinput" value="15000">
+                            </div>
+                            <div class="col-sm-8">
+                                <label>Rate</label>
+                                    <div class="range-slider small-slider">
+                                        <div class="range-slider__range-limits">
+                                            <span class="range-limit-left">0%</span>
+                                            <span class="range-limit-right">100%</span>
+                                        </div>
+                                        <input id="int_rate" name="int_rate"  type="range" class="range-slider__range small-slider" type="range" value="12" min="0" max="100">
+                                        <span class="range-slider__value">0</span>
+                                    </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <label>Term(months)</label>
+                                <div style="width:155px;">
+                                    <input class='toggle mytoggle' type="checkbox" id="term" value="60" name="term" checked='checked' />
+                                    <span style="font-size: 18px;">60</span>
+                                </div>
+
+                            </div>
+                            <div class="col-sm-8">
+                                <label>%Funded</label>
+                                <div class="range-slider small-slider">
+                                    <div class="range-slider__range-limits">
+                                        <span class="range-limit-left">0</span>
+                                        <span class="range-limit-right">100%</span>
+                                    </div>
+                                    <input id="fund_rate" name="fund_rate" type="range" class="range-slider__range small-slider" type="range" value="69" min="0" max="100">
+                                    <span class="range-slider__value">0</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="sliders">
+                            <div class="help-tip" id="extra-t">
+                            <p>A ratio calculated using the borrower’s total monthly debt payments on the total debt obligations, excluding mortgage and the requested LC loan, divided by the borrower’s self-reported monthly income.</p>
+                            </div>
+                            <label id="extra">Debt-to-Income Ratio</label>
+                                <div class="range-slider">
+                                    <div class="range-slider__range-limits">
+                                        <span class="range-limit-left">0%</span>
+                                        <span class="range-limit-right">100%</span>
+                                    </div>
+                                    <input id="dti" name="dti" class="range-slider__range" type="range" value="26" min="0" max="100">
+                                    <span class="range-slider__value">0</span>
+                                </div>
+
+
+                            <div class="help-tip" id="extra-t">
+                                <p>The self-reported annual income provided by the borrower during registration.</p>
+                            </div>
+                            <label id="extra">Annual Income</label>
+                                <div class="range-slider">
+                                    <div class="range-slider__range-limits">
+                                        <span class="range-limit-left">0</span>
+                                        <span class="range-limit-right">1000000</span>
+                                    </div>
+                                    <input id="annual_inc" name="annual_inc" class="range-slider__range" type="range" value="78000" min="0" max="1000000">
+                                    <span class="range-slider__value">0</span>
+                                </div>
+                            <div class="help-tip" id="extra-t">
+                                <p>Total installment high credit/credit limit</p>
+                            </div>
+                            <label id="extra">Total Installment Limit</label>
+                                <div class="range-slider">
+                                    <div class="range-slider__range-limits">
+                                        <span class="range-limit-left">0</span>
+                                        <span class="range-limit-right">1500000</span>
+                                    </div>
+                                    <input name="total_il_high_credit_limit" class="range-slider__range" type="range" value="41360" min="0" max="1500000">
+                                    <span class="range-slider__value">0</span>
+                                </div>
+
+                            <div class="help-tip" id="extra-t">
+                                <p>Total open to buy on revolving bankcards.</p>
+                            </div>
+                            <label id="extra">Revolving Credit Limit</label>
+                                <div class="range-slider">
+                                    <div class="range-slider__range-limits">
+                                        <span class="range-limit-left">0</span>
+                                        <span class="range-limit-right">300000</span>
+                                    </div>
+                                    <input name="bc_open_to_buy" class="range-slider__range" type="range" value="9525" min="0" max="300000">
+                                    <span class="range-slider__value">0</span>
+                                </div>
+
+                            <div class="help-tip" id="extra-t">
+                                <p>Ratio of total current balance to high credit/credit limit for all bankcard accounts.</p>
+                            </div>
+                            <label id="extra">Portion of Balances</label>
+                                <div class="range-slider">
+                                    <div class="range-slider__range-limits">
+                                        <span class="range-limit-left">0%</span>
+                                        <span class="range-limit-right">300%</span>
+                                    </div>
+                                    <input name="bc_util" class="range-slider__range" type="range" value="42" min="0" max="300">
+                                    <span class="range-slider__value">0</span>
+                                </div>
+                        </div>
+
+                        <!-- Submit button -->
+                        <button id="go" class="submit-btn" type="submit" >Submit</button>
+                    </div>
+                </form>
+			</div>
+		</div>
+		<div class="col-sm-6 output-box no-padding">
+			<div class="box-header-out">
+				<div class="input-title">Prediction Table</div>
+			</div>
+			<div class="input-item overflow-out">
+				<div class="table-responsive">
+		            <table class="table table-striped">
+		              <thead>
+		                <tr>
+		                  <th>ID</th>
+		                  <th>Amount</th>
+		                  <th>Rate</th>
+		                  <th>Term</th>
+		                  <th>%Founded</th>
+		                  <th>Risk</th>
+		                </tr>
+		              </thead>
+		              <tbody id="result">
+		                <tr>
+		                  <td>1</td>
+		                  <td>15000</td>
+		                  <td>12</td>
+		                  <td>60</td>
+		                  <td>69</td>
+		                  <td>0.088</td>
+		                </tr>
+		              </tbody>
+		            </table>
+          		</div>
+          		<!-- Clear button -->
+				<button id="clear" class="submit-btn">Clear</button>
+			</div>
+		</div>
+
+	</div>
+
+
+
+{% endblock %}
+
+{% block afterscript %}
+    <script type="text/javascript">
+        $('#term').click(function(){
+
+		var $this = $(this);
+		$this.toggleClass('term');
+		if($this.hasClass('term')){
+			$('#term').val('36');
+		} else {
+			$('#term').val('60');
+		}
+	});
+    </script>
+    <script type="application/javascript">
+        var id_num = 1;
+        var error_response = function(data){
+            $('.api-response').text('Error:' + "");
+        }
+
+        var susccess_response = function(data){
+            //$('.api-response').html("API Response: OK<br/>Content: " + JSON.stringify(data));
+            if(data.status != 'failed')
+                var loan_amnt = $('#loan_amnt').val();
+                var int_rate = $('#int_rate').val();
+                var term = $('#term').val();
+                var fund_rate = $('#fund_rate').val();
+                id_num+=1;
+                $("#result").append("<tr><td>" + id_num +"</td><td>" + loan_amnt + "</td><td>" + int_rate + "</td><td>" + term + "</td><td>" + fund_rate + "</td><td>" + data.data + "</td></tr>")
+        }
+
+
+        $().ready(function(e){
+
+            //$('form.ajax-post button[type=submit]').click(function(e){
+            $('form.ajax-post').submit(function(e){
+                e.preventDefault();
+
+                var form = $(this);
+                $.ajax({
+                    url: form.attr('action'),
+                    method: form.attr('method'),
+                    data: form.serialize(),
+                    dataType: "json"
+                })
+                .done(function(data){susccess_response(data);})
+                .fail(function(data){error_response(data);});
+
+                // void the form submit again
+                return false;
+            });
+
+            $('#clear').click(function(){
+                $('#result').html('');
+                id_num = 0;
+            })
+        });
+    </script>
+    <script>
+
+    </script>
+{% endblock %}
