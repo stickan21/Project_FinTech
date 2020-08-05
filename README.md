@@ -1,3 +1,3 @@
 # This is a toolkit based on Flask
 
-it just wrap some module and arrange each app in themself directory
+Refer to FINTECH_PROJECT.ipynb for introduction.
